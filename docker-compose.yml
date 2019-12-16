@@ -4,15 +4,18 @@ services:
   nginx:
     image: nginx:latest
     ports:
-      -8080:80
+      -5000:80
     depends_on:
       - app
-    volumes:
+    networks:
+      - test_network
 
   app:
     build: ./web
     depends_on:
       - db
+    networks:
+      - test_network
   db:
     image: mysql:latest
     ports:
@@ -24,3 +27,8 @@ services:
       MYSQL_DATABASE:
       MYSQL_USER:
       MYSQL_PASSWORD:
+    networks:
+      - test_network
+networks:
+  test_network:
+    driver: bridge
